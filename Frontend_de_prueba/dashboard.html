@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenida</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bienvenida">
+        <h1>Ingreso exitoso</h1>
+        <p id="mensaje"></p>
+    </div>
+    <script>
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        if (usuario) {
+            let mensaje = "Bienvenide " + usuario.email;
+            if (usuario.rol === "Administrador") {
+                mensaje += " (Eres la bestia, tienes acceso total)";
+            } else if (usuario.rol === "co_administrador") {
+                mensaje += " (Eres la mini bestia, tienes acceso de gestión)";
+            } else if (usuario.rol === "Conductor") {
+                mensaje += " (Eres el Run Run, tienes acceso limitado";
+            }
+            document.getElementById("mensaje").innerText = mensaje;
+        }
+    </script>
+</body>
+</html>
