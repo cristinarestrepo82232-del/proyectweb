@@ -5,7 +5,7 @@ const email = document.getElementById("email").value;
 const password = document.getElementById("password").value;
 
 try {
-    const res = await fetch("http://localhost:3000/api/v1/auth/login", {
+    const res = await fetch("https://proyectweb-1t6d.onrender.com/api/v1/auth/login", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"

@@ -23,21 +23,21 @@ function Viajes() {
     }, []);
 
     const obtenerViajes = () => {
-        fetch("http://localhost:3000/api/v1/viajes")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/viajes")
             .then(res => res.json())
             .then(data => setViajes(data))
             .catch(err => console.error("Error cargando viajes:", err));
     };
 
     const obtenerCamiones = () => {
-        fetch("http://localhost:3000/api/v1/camiones")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/camiones")
             .then(res => res.json())
             .then(data => setCamiones(data))
             .catch(err => console.error("Error cargando camiones:", err));
     };
 
     const obtenerConductores = () => {
-        fetch("http://localhost:3000/api/v1/conductores")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/conductores")
             .then(res => res.json())
             .then(data => setConductores(data))
             .catch(err => console.error("Error cargando conductores:", err));
@@ -65,7 +65,7 @@ function Viajes() {
             return; 
         }
 
-        fetch("http://localhost:3000/api/v1/viajes", {
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/viajes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(nuevoViaje),

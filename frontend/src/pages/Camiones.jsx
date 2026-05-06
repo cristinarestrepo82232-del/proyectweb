@@ -15,14 +15,14 @@ function Camiones() {
 
     useEffect(() => {
         obtenerCamiones();
-        fetch("http://localhost:3000/api/v1/conductores")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/conductores")
             .then(res => res.json())
             .then(data => setConductores(data))
             .catch(err => console.error(err));
     }, []);
 
     const obtenerCamiones = () => {
-        fetch("http://localhost:3000/api/v1/camiones")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/camiones")
             .then(res => res.json())
             .then(data => setCamiones(data));
     };
@@ -30,8 +30,8 @@ function Camiones() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const url = editando
-            ? `http://localhost:3000/api/v1/camion/${idEditar}`
-            : "http://localhost:3000/api/v1/camion";
+            ? `hhttps://proyectweb-1t6d.onrender.com/api/v1/camion/${idEditar}`
+            : "hhttps://proyectweb-1t6d.onrender.com/api/v1/camion";
         const metodo = editando ? "PUT" : "POST";
 
         fetch(url, {
@@ -55,7 +55,7 @@ function Camiones() {
 
     const eliminarCamion = (id) => {
         if (!window.confirm("¿Seguro que quieres eliminar este camión?")) return;
-        fetch(`http://localhost:3000/api/v1/camion/${id}`, { method: "DELETE" })
+        fetch(`https://proyectweb-1t6d.onrender.com/api/v1/camion/${id}`, { method: "DELETE" })
         .then(() => {
             alert("Camión eliminado");
             setCamiones(camiones.filter(c => c.id_camion !== id));

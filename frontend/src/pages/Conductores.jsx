@@ -15,7 +15,7 @@ function Conductores() {
     const [idEditar, setIdEditar] = useState(null);
 
     const obtenerConductores = () => {
-        fetch("http://localhost:3000/api/v1/conductores")
+        fetch("https://proyectweb-1t6d.onrender.com/api/v1/conductores")
             .then(res => res.json())
             .then(data => setConductores(data))
             .catch(err => console.error(err));
@@ -28,8 +28,8 @@ function Conductores() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const url = editando
-            ? `http://localhost:3000/api/v1/conductores/${idEditar}`
-            : "http://localhost:3000/api/v1/conductor";
+            ? `https://proyectweb-1t6d.onrender.com/api/v1/conductores/${idEditar}`
+            : "https://proyectweb-1t6d.onrender.com/api/v1/conductor";
         
         const metodo = editando ? "PUT" : "POST";
 
@@ -54,7 +54,7 @@ function Conductores() {
     const eliminarConductor = (id) => {
         if (!window.confirm("¿Seguro que quieres eliminar este conductor?")) return;
         
-        fetch(`http://localhost:3000/api/v1/conductores/${id}`, {
+        fetch(`https://proyectweb-1t6d.onrender.com/api/v1/conductores/${id}`, {
             method: "DELETE",
         })
         .then(async (res) => {

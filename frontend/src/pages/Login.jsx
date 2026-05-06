@@ -24,7 +24,7 @@ function Login() {
         // IMPORTANTE: Aquí usamos 'register' o 'login' según tu authRoutes.js
         const endpoint = esRegistro ? "register" : "login";    
         
-        fetch(`http://localhost:3000/api/v1/auth/${endpoint}`, {
+        fetch(`https://proyectweb-1t6d.onrender.com/api/v1/auth/${endpoint}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
