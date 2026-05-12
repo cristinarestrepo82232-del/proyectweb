@@ -1,91 +1,198 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import { Truck, Map, Users, ShieldCheck, ArrowRight, BarChart3 } from "lucide-react";
 
 function Home() {
-    const token = localStorage.getItem("token");
-
     return (
-        <div style={{ fontFamily: 'Arial, sans-serif', color: '#333' }}>
-            {/* SECCIÓN HERO (Principal) */}
-            <header style={heroStyle}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '20px' }}>Sistema de Gestión Logística</h1>
-                <p style={{ fontSize: '1.2rem', marginBottom: '30px', maxWidth: '600px' }}>
-                    Control total sobre tus conductores, camiones y rutas en tiempo real. 
-                    Optimiza la eficiencia de tu flota hoy mismo.
+        <div style={styles.container}>
+            <section style={styles.heroSection}>
+                <div style={styles.badge}>Logística Inteligente</div>
+                <h1 style={styles.heroTitle}>
+                    Toma el control total de tu <span style={styles.highlight}>Flota y Rutas</span>
+                </h1>
+                <p style={styles.heroSubtitle}>
+                    TransRoute Pro es la plataforma definitiva para gestionar camiones, asignar conductores, 
+                    monitorear viajes y optimizar tus gastos operativos en tiempo real.
                 </p>
-                {!token ? (
-                    <Link to="/login" style={buttonStyle}>Comenzar ahora</Link>
-                ) : (
-                    <Link to="/viajes" style={buttonStyle}>Gestionar Viajes</Link>
-                )}
-            </header>
-            
-            {/* SECCIÓN DE CARACTERÍSTICAS */}
-            <section style={sectionStyle}>
-                <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>Nuestros Módulos</h2>
-                <div style={gridStyle}>
-                    <div style={cardStyle}>
-                        <h3>Gestión de Camiones</h3>
-                        <p>Control de placas, modelos y estado técnico de toda tu flota.</p>
+                <div style={styles.heroActions}>
+                    <Link to="/login" style={styles.primaryBtn}>
+                        Comenzar Ahora <ArrowRight size={20} />
+                    </Link>
+                </div>
+            </section>
+
+            <section style={styles.featuresSection}>
+                <h2 style={styles.sectionTitle}>Todo lo que necesitas en un solo lugar</h2>
+                
+                <div style={styles.grid}>
+                    <div style={styles.card}>
+                        <div style={{...styles.iconWrapper, backgroundColor: "#dbeafe", color: "#2563eb"}}>
+                            <Truck size={28} />
+                        </div>
+                        <h3 style={styles.cardTitle}>Gestión de Camiones</h3>
+                        <p style={styles.cardText}>
+                            Mantén el registro de tu flota, modelos, placas y planifica los mantenimientos preventivos sin perder detalle.
+                        </p>
                     </div>
-                    <div style={cardStyle}>
-                        <h3>Conductores</h3>
-                        <p>Registro detallado de licencias, contactos y asignaciones de personal.</p>
+
+                    <div style={styles.card}>
+                        <div style={{...styles.iconWrapper, backgroundColor: "#dcfce7", color: "#16a34a"}}>
+                            <Map size={28} />
+                        </div>
+                        <h3 style={styles.cardTitle}>Control de Viajes</h3>
+                        <p style={styles.cardText}>
+                            Asigna rutas, establece fechas de salida/llegada y calcula los fletes exactos para cada recorrido.
+                        </p>
                     </div>
-                    <div style={cardStyle}>
-                        <h3>Control de Viajes</h3>
-                        <p>Seguimiento de rutas, fletes y destinos para una logística impecable.</p>
+
+                    <div style={styles.card}>
+                        <div style={{...styles.iconWrapper, backgroundColor: "#f3e8ff", color: "#9333ea"}}>
+                            <Users size={28} />
+                        </div>
+                        <h3 style={styles.cardTitle}>Equipo de Conductores</h3>
+                        <p style={styles.cardText}>
+                            Administra las licencias, asigna camiones específicos a cada conductor y mantén tu equipo organizado.
+                        </p>
+                    </div>
+
+                    <div style={styles.card}>
+                        <div style={{...styles.iconWrapper, backgroundColor: "#ffedd5", color: "#ea580c"}}>
+                            <BarChart3 size={28} />
+                        </div>
+                        <h3 style={styles.cardTitle}>Control de Gastos</h3>
+                        <p style={styles.cardText}>
+                            Registra peajes, combustible, viáticos y genera facturas para tener total claridad de la rentabilidad.
+                        </p>
                     </div>
                 </div>
             </section>
-            
-            {/* PIE DE PÁGINA */}
-            <footer style={{ textAlign: 'center', padding: '40px', backgroundColor: '#f4f4f4' }}>
-                <p>© 2026 Transportes Logísticos S.A. - Todos los derechos reservados.</p>
+
+            <footer style={styles.footer}>
+                <p>© 2026 TransRoute Pro. Todos los derechos reservados.</p>
             </footer>
         </div>
     );
 }
 
-// ESTILOS (Objetos JS)
-const heroStyle = {
-    background: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1519003722824-194d4455a60c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: '70vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white',
-    textAlign: 'center',
-    padding: '0 20px'
-};
-const buttonStyle = {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    padding: '15px 30px',
-    textDecoration: 'none',
-    borderRadius: '5px',
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    transition: '0.3s'
-};
-const sectionStyle = {
-    padding: '60px 20px',
-    maxWidth: '1200px',
-    margin: '0 auto'
-};
-const gridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '20px'
-};
-const cardStyle = {
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    textAlign: 'center',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+// Estilos
+const styles = {
+    container: {
+        fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+        color: "#1e293b",
+        marginTop: "-20px",
+    },
+    heroSection: {
+        background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)",
+        color: "white",
+        padding: "80px 20px",
+        textAlign: "center",
+        borderRadius: "0 0 40px 40px",
+        boxShadow: "0 10px 30px -10px rgba(0,0,0,0.3)",
+    },
+    badge: {
+        display: "inline-block",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        border: "1px solid rgba(255, 255, 255, 0.2)",
+        padding: "6px 16px",
+        borderRadius: "20px",
+        fontSize: "14px",
+        fontWeight: "600",
+        marginBottom: "20px",
+        backdropFilter: "blur(5px)",
+    },
+    heroTitle: {
+        fontSize: "clamp(32px, 5vw, 56px)",
+        fontWeight: "800",
+        margin: "0 auto 20px",
+        maxWidth: "800px",
+        lineHeight: "1.2",
+    },
+    highlight: {
+        color: "#60a5fa",
+    },
+    heroSubtitle: {
+        fontSize: "clamp(16px, 2vw, 20px)",
+        color: "#94a3b8",
+        maxWidth: "600px",
+        margin: "0 auto 40px",
+        lineHeight: "1.6",
+    },
+    heroActions: {
+        display: "flex",
+        justifyContent: "center",
+        gap: "15px",
+    },
+    primaryBtn: {
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        backgroundColor: "#2563eb",
+        color: "white",
+        padding: "16px 32px",
+        borderRadius: "12px",
+        textDecoration: "none",
+        fontSize: "18px",
+        fontWeight: "bold",
+        boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)",
+        transition: "transform 0.2s",
+    },
+    featuresSection: {
+        padding: "80px 20px",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        textAlign: "center",
+    },
+    sectionTitle: {
+        fontSize: "32px",
+        fontWeight: "bold",
+        marginBottom: "50px",
+        color: "#0f172a",
+    },
+    grid: {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "30px",
+        justifyContent: "center",
+    },
+    card: {
+        backgroundColor: "white",
+        borderRadius: "20px",
+        padding: "30px",
+        width: "100%",
+        maxWidth: "260px",
+        boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05)",
+        border: "1px solid #f1f5f9",
+        textAlign: "left",
+        flex: "1 1 260px",
+    },
+    iconWrapper: {
+        width: "60px",
+        height: "60px",
+        borderRadius: "16px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: "20px",
+    },
+    cardTitle: {
+        fontSize: "20px",
+        fontWeight: "700",
+        marginBottom: "12px",
+        color: "#1e293b",
+    },
+    cardText: {
+        fontSize: "15px",
+        color: "#64748b",
+        lineHeight: "1.6",
+    },
+    // --- FOOTER ---
+    footer: {
+        textAlign: "center",
+        padding: "30px 20px",
+        borderTop: "1px solid #e2e8f0",
+        color: "#94a3b8",
+        fontSize: "14px",
+    }
 };
 
 export default Home;
