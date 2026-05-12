@@ -6,8 +6,7 @@ const generarToken = (usuario) => {
         email: usuario.email,
         rol: usuario.rol
     };
-
-    return jwt.sign (payload, process.env.JWT_SECRET, {
+    return jwt.sign(payload, process.env.JWT_SECRET || 'clave_maestra_super_secreta', {
         expiresIn: process.env.JWT_EXPIRES_IN || '24h'
     });
 };

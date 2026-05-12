@@ -34,10 +34,59 @@ const crearViaje = async (viaje) => {
         producto_carga, 
         origen, 
         destino, 
-        valor_flete]);
+        valor_flete
+    ]);
     return result;
+};
+const actualizarViaje = async (id, viaje) => {
+    const { fk_camion, fk_conductor, fecha_salida, fecha_llegada, producto_carga, origen, destino, valor_flete } = viaje;
+    if (valor_flete < 0) {
+        throw new Error("El valor del flete no puede ser negativo");
+    }
+    const dSalida = new Date(fecha_salida);
+    const dLlegada = new Date(fecha_llegada);
+    if (dLlegada < dSalida) {
+        throw new Error("La fecha de llegada no puede ser anterior a la de salida");
+    }
+    const sql = `
+        UPDATE viajes 
+        SET fk_camion = ?, fk_conductor = ?, fecha_salida = ?, fecha_llegada = ?, producto_carga = ?, origen = ?, destino = ?, valor_flete = ?
+        WHERE id_viaje = ?
+    `;
+    const [result] = await db.execute(sql, [
+        fk_camion, 
+        fk_conductor, 
+        fecha_salida, 
+        fecha_llegada, 
+        producto_carga, 
+        origen, 
+        destino, 
+        valor_flete,
+        id
+    ]);
+    if (result.affectedRows === 0) {
+        throw new Error("Viaje no encontrado");
+    }
+    return result;
+};
+const eliminarViaje = async (id) => {
+    try {
+        const sql = "DELETE FROM viajes WHERE id_viaje = ?";
+        const [result] = await db.execute(sql, [id]);
+        if (result.affectedRows === 0) {
+            throw new Error("Viaje no encontrado");
+        }
+        return result;
+    } catch (error) {
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            throw new Error("No se puede eliminar este viaje porque ya tiene gastos asociados.");
+        }
+        throw error;
+    }
 };
 module.exports = {
     obtenerViajes,
-    crearViaje
+    crearViaje,
+    actualizarViaje,
+    eliminarViaje
 };

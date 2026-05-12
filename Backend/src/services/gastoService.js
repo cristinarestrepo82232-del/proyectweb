@@ -5,17 +5,52 @@ const obtenerGastos = async () => {
 };
 const crearGasto = async (gasto) => {
     const { fk_viaje, tipo_gasto, monto } = gasto;
+    if (!fk_viaje || !tipo_gasto || monto === undefined) {
+        throw new Error("El viaje, el tipo de gasto y el monto son obligatorios");
+    }
     const sql = `
-        INSERT INTO gastos
-        VALUES(null, ?, ?, ?);
+        INSERT INTO gastos (fk_viaje, tipo_gasto, monto)
+        VALUES(?, ?, ?);
     `;
     const [result] = await db.execute(sql, [
         fk_viaje, 
         tipo_gasto, 
-        monto]);
+        monto
+    ]);
+    return result;
+};
+const actualizarGasto = async (id, gasto) => {
+    const { fk_viaje, tipo_gasto, monto } = gasto;
+    if (!fk_viaje || !tipo_gasto || monto === undefined) {
+        throw new Error("El viaje, el tipo de gasto y el monto son obligatorios");
+    }
+    const sql = `
+        UPDATE gastos 
+        SET fk_viaje = ?, tipo_gasto = ?, monto = ?
+        WHERE id_gastos = ?
+    `;
+    const [result] = await db.execute(sql, [
+        fk_viaje,
+        tipo_gasto,
+        monto,
+        id
+    ]);
+    if (result.affectedRows === 0) {
+        throw new Error("Gasto no encontrado");
+    }
+    return result;
+};
+const eliminarGasto = async (id) => {
+    const sql = "DELETE FROM gastos WHERE id_gastos = ?";
+    const [result] = await db.execute(sql, [id]);
+    if (result.affectedRows === 0) {
+        throw new Error("Gasto no encontrado");
+    }
     return result;
 };
 module.exports = {
     obtenerGastos,
-    crearGasto
+    crearGasto,
+    actualizarGasto,
+    eliminarGasto
 };

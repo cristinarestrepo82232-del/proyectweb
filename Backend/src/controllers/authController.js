@@ -1,16 +1,17 @@
 const AuthService = require('../services/authService');
-
 class AuthController {
     static async registrar(req, res, next) {
         try {
+            const { email, password } = req.body;
+            if (!email || !password) {
+                return res.status(400).json({ success: false, message: "Email y password requeridos" });
+            }
             const result = await AuthService.registrarUsuario(req.body);
-
             res.status(201).json({
                 success: true,
                 message: 'Usuario registrado exitosamente',
                 data: result
             });
-
         } catch (error) {
             next(error);
         }
@@ -24,7 +25,6 @@ class AuthController {
                     message: 'Email y password son obligatorios'
                 });
             }
-
             const result = await AuthService.login(email, password);
             if (!result) {
                 return res.status(401).json({
@@ -37,7 +37,6 @@ class AuthController {
                 message: 'Login exitoso',
                 data: result
             });
-
         } catch (error) {
             if (error.statusCode) {
                 return res.status(error.statusCode).json({
@@ -49,5 +48,4 @@ class AuthController {
         }
     }
 }
-
 module.exports = AuthController;
