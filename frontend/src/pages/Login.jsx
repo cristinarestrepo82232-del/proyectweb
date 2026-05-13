@@ -141,42 +141,103 @@ function Login() {
 
 const styles = {
     pageWrapper: {
-        minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
-        background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)", padding: "20px"
+        minHeight: "100vh", 
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)", // Fondo más profundo
+        padding: "20px"
     },
     loginCard: {
-        backgroundColor: "#fff", borderRadius: "20px", padding: "40px", width: "100%",
-        maxWidth: "400px", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.3)", textAlign: "center"
+        backgroundColor: "#ffffff", 
+        borderRadius: "24px", 
+        padding: "40px", 
+        width: "100%",
+        maxWidth: "400px", 
+        boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)", 
+        textAlign: "center"
     },
     header: { marginBottom: "30px" },
     logoBadge: {
-        background: "#2563eb", width: "50px", height: "50px", borderRadius: "12px",
-        display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 15px"
+        background: "#2563eb", 
+        width: "60px", 
+        height: "60px", 
+        borderRadius: "16px",
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "center", 
+        margin: "0 auto 20px",
+        boxShadow: "0 10px 15px -3px rgba(37, 99, 235, 0.4)"
     },
-    title: { fontSize: "24px", fontWeight: "bold", color: "#0f172a", margin: "0" },
-    subtitle: { fontSize: "14px", color: "#64748b", marginTop: "5px" },
-    form: { display: "flex", flexDirection: "column", gap: "18px" },
+    title: { 
+        fontSize: "28px", 
+        fontWeight: "800", 
+        color: "#1e293b", // Azul muy oscuro para contraste sobre blanco
+        margin: "0",
+        letterSpacing: "-0.025em"
+    },
+    subtitle: { 
+        fontSize: "15px", 
+        color: "#64748b", // Gris azulado legible
+        marginTop: "8px" 
+    },
+    form: { display: "flex", flexDirection: "column", gap: "20px" },
     inputGroup: { textAlign: "left" },
-    label: { fontSize: "13px", fontWeight: "600", color: "#475569", marginBottom: "5px", display: "block" },
+    label: { 
+        fontSize: "14px", 
+        fontWeight: "600", 
+        color: "#334155", // Gris oscuro para las etiquetas
+        marginBottom: "6px", 
+        display: "block",
+        paddingLeft: "4px"
+    },
     inputContainer: { position: "relative", display: "flex", alignItems: "center" },
-    icon: { position: "absolute", left: "12px", color: "#94a3b8" },
+    icon: { position: "absolute", left: "14px", color: "#64748b" },
     input: {
-        width: "100%", padding: "12px 12px 12px 40px", borderRadius: "10px", border: "1px solid #e2e8f0",
-        fontSize: "15px", outline: "none", backgroundColor: "#f8fafc"
+        width: "100%", 
+        padding: "14px 14px 14px 45px", 
+        borderRadius: "12px", 
+        border: "2px solid #f1f5f9",
+        fontSize: "15px", 
+        color: "#1e293b", // Texto que escribe el usuario
+        outline: "none", 
+        backgroundColor: "#f8fafc",
+        transition: "border-color 0.2s ease",
     },
     select: {
-        width: "100%", padding: "12px 12px 12px 40px", borderRadius: "10px", border: "1px solid #e2e8f0",
-        fontSize: "15px", backgroundColor: "#f8fafc", appearance: "none"
+        width: "100%", 
+        padding: "14px 14px 14px 45px", 
+        borderRadius: "12px", 
+        border: "2px solid #f1f5f9",
+        fontSize: "15px", 
+        color: "#1e293b",
+        backgroundColor: "#f8fafc", 
+        appearance: "none",
+        cursor: "pointer"
     },
     submitBtn: {
-        backgroundColor: "#2563eb", color: "white", padding: "14px", borderRadius: "10px",
-        border: "none", fontWeight: "600", cursor: "pointer", transition: "all 0.2s"
+        backgroundColor: "#2563eb", 
+        color: "#ffffff", 
+        padding: "16px", 
+        borderRadius: "12px",
+        border: "none", 
+        fontWeight: "700", 
+        fontSize: "16px",
+        cursor: "pointer", 
+        transition: "transform 0.1s ease, background-color 0.2s ease",
+        boxShadow: "0 4px 6px -1px rgba(37, 99, 235, 0.2)"
     },
-    btnContent: { display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" },
-    footer: { marginTop: "20px" },
+    btnContent: { display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" },
+    footer: { marginTop: "25px" },
     toggleBtn: {
-        background: "none", border: "none", color: "#2563eb", fontSize: "14px",
-        fontWeight: "500", cursor: "pointer", textDecoration: "underline"
+        background: "none", 
+        border: "none", 
+        color: "#2563eb", 
+        fontSize: "14px",
+        fontWeight: "600", 
+        cursor: "pointer", 
+        textDecoration: "none",
+        transition: "color 0.2s ease"
     }
 };
 
