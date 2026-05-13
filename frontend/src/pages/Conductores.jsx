@@ -68,6 +68,10 @@ function Conductores() {
         try {
             const res = await fetch(`${API_BASE}/usuarios`, { headers: fetchHeaders });
             const data = await res.json();
+            
+            // 👇 NUESTRO ESPÍA AQUÍ
+            console.log("Lista de Usuarios recibida:", data);
+
             if (Array.isArray(data)) {
                 setUsuariosList(data);
             }
