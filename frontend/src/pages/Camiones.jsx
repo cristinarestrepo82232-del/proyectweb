@@ -24,7 +24,8 @@ function Camiones() {
     const usuarioData = localStorage.getItem("usuario");
     const token = localStorage.getItem("token");
     const usuario = usuarioData ? JSON.parse(usuarioData) : null;
-    const rol = usuario?.fk_rol;
+    
+    const rol = Number(usuario?.fk_rol || usuario?.rol); 
 
     const esAdmin = rol === 1;
     const esCoAdmin = rol === 2;
