@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Users, X, Calendar, Phone, CreditCard, UserCheck } from "lucide-react";
+import { Plus, Edit, Trash2, Users, X, Calendar, Phone, CreditCard, UserCheck, AlertTriangle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -40,6 +40,14 @@ function Conductores() {
         "Authorization": `Bearer ${token}`
     };
 
+    // Función para verificar si la licencia está vencida
+    const esLicenciaVencida = (fecha) => {
+        if (!fecha) return false;
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        return new Date(fecha) < hoy;
+    };
+
     useEffect(() => {
         if (!token) {
             toast.error("No tienes autorización. Inicia sesión.");
@@ -69,11 +77,10 @@ function Conductores() {
             const res = await fetch(`${API_BASE}/usuarios`, { headers: fetchHeaders });
             const data = await res.json();
             
-            // 👇 NUESTRO ESPÍA AQUÍ
-            console.log("Lista de Usuarios recibida:", data);
-
             if (Array.isArray(data)) {
-                setUsuariosList(data);
+                // Filtramos para mostrar solo los que tienen rol de conductor (ID 3 según tu SQL)
+                const soloConductores = data.filter(u => u.fk_rol === 3);
+                setUsuariosList(soloConductores);
             }
         } catch (error) {
             console.error("Error cargando usuarios:", error);
@@ -182,9 +189,8 @@ function Conductores() {
                                 value={form.licencia_vence} onChange={(e) => setForm({ ...form, licencia_vence: e.target.value })} />
                         </div>
 
-                        {/* SELECT DE USUARIOS */}
                         <div>
-                            <label style={styles.label}>Usuario Vinculado (Opcional)</label>
+                            <label style={styles.label}>Usuario Vinculado (Email)</label>
                             <select 
                                 style={styles.input}
                                 value={form.fk_usuario}
@@ -193,7 +199,7 @@ function Conductores() {
                                 <option value="">-- Sin usuario asignado --</option>
                                 {usuariosList.map(u => (
                                     <option key={u.id_usuario} value={u.id_usuario}>
-                                        {u.nombre_usuario} (ID: {u.id_usuario})
+                                        {u.email} (ID: {u.id_usuario})
                                     </option>
                                 ))}
                             </select>
@@ -221,30 +227,35 @@ function Conductores() {
                         </tr>
                     </thead>
                     <tbody>
-                        {conductores.map((c) => (
-                            <tr key={c.id_conductor} style={styles.tr}>
-                                <td style={styles.td}>#{c.id_conductor}</td>
-                                <td style={styles.td}><strong>{c.nombre}</strong></td>
-                                <td style={styles.td}><div style={{display:'flex', alignItems:'center', gap: '5px'}}><Phone size={14}/> {c.telefono}</div></td>
-                                <td style={styles.td}><div style={{display:'flex', alignItems:'center', gap: '5px'}}><CreditCard size={14}/> {c.licencia_nro}</div></td>
-                                <td style={styles.td}>
-                                    <div style={{display:'flex', alignItems:'center', gap: '5px'}}>
-                                        <Calendar size={14}/> {c.licencia_vence ? new Date(c.licencia_vence).toLocaleDateString() : 'N/A'}
-                                    </div>
-                                </td>
-                                <td style={styles.td}>
-                                    <div style={{display:'flex', alignItems:'center', gap: '5px'}}>
-                                        <UserCheck size={14}/> {c.fk_usuario || 'Ninguno'}
-                                    </div>
-                                </td>
-                                <td style={styles.td}>
-                                    <div style={styles.acciones}>
-                                        {puedeCrearYEditar && <button style={styles.btnEditar} onClick={() => cargarParaEditar(c)}><Edit size={18}/></button>}
-                                        {puedeEliminar && <button style={styles.btnEliminar} onClick={() => eliminarConductor(c.id_conductor)}><Trash2 size={18}/></button>}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        {conductores.map((c) => {
+                            const vencida = esLicenciaVencida(c.licencia_vence);
+                            return (
+                                <tr key={c.id_conductor} style={styles.tr}>
+                                    <td style={styles.td}>#{c.id_conductor}</td>
+                                    <td style={styles.td}><strong>{c.nombre}</strong></td>
+                                    <td style={styles.td}><div style={{display:'flex', alignItems:'center', gap: '5px'}}><Phone size={14}/> {c.telefono}</div></td>
+                                    <td style={styles.td}><div style={{display:'flex', alignItems:'center', gap: '5px'}}><CreditCard size={14}/> {c.licencia_nro}</div></td>
+                                    <td style={{...styles.td, color: vencida ? '#ef4444' : 'inherit'}}>
+                                        <div style={{display:'flex', alignItems:'center', gap: '5px', fontWeight: vencida ? '600' : 'normal'}}>
+                                            <Calendar size={14}/> 
+                                            {c.licencia_vence ? new Date(c.licencia_vence).toLocaleDateString() : 'N/A'}
+                                            {vencida && <AlertTriangle size={14} title="Licencia Vencida" />}
+                                        </div>
+                                    </td>
+                                    <td style={styles.td}>
+                                        <div style={{display:'flex', alignItems:'center', gap: '5px'}}>
+                                            <UserCheck size={14}/> {c.fk_usuario || 'Ninguno'}
+                                        </div>
+                                    </td>
+                                    <td style={styles.td}>
+                                        <div style={styles.acciones}>
+                                            {puedeCrearYEditar && <button style={styles.btnEditar} onClick={() => cargarParaEditar(c)} title="Editar"><Edit size={18}/></button>}
+                                            {puedeEliminar && <button style={styles.btnEliminar} onClick={() => eliminarConductor(c.id_conductor)} title="Eliminar"><Trash2 size={18}/></button>}
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
