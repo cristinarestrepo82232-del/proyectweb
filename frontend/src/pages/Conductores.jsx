@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Users, X, Calendar, Phone, CreditCard } from "lucide-react";
+import { Plus, Edit, Trash2, Users, X, Calendar, Phone, CreditCard, UserCheck } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 function Conductores() {
     const [conductores, setConductores] = useState([]);
+    const [usuariosList, setUsuariosList] = useState([]);
     const [loading, setLoading] = useState(true);
     
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -23,8 +24,8 @@ function Conductores() {
 
     const usuarioData = localStorage.getItem("usuario");
     const token = localStorage.getItem("token");
-    const usuario = usuarioData ? JSON.parse(usuarioData) : null;
-    const rolActual = usuario?.rol;
+    const usuarioLogueado = usuarioData ? JSON.parse(usuarioData) : null;
+    const rolActual = usuarioLogueado?.rol;
 
     const esAdmin = rolActual === "Administrador";
     const esCoAdmin = rolActual === "co_administrador"; 
@@ -46,16 +47,15 @@ function Conductores() {
             return;
         }
         cargarDatos();
+        cargarUsuarios();
     }, []);
 
     const cargarDatos = async () => {
         try {
             const res = await fetch(`${API_BASE}/conductores`, { headers: fetchHeaders });
             const data = await res.json();
-            
             let lista = Array.isArray(data) ? data : [];
             lista.sort((a, b) => a.id_conductor - b.id_conductor);
-            
             setConductores(lista);
             setLoading(false);
         } catch (error) {
@@ -64,9 +64,26 @@ function Conductores() {
         }
     };
 
+    const cargarUsuarios = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/usuarios`, { headers: fetchHeaders });
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                setUsuariosList(data);
+            }
+        } catch (error) {
+            console.error("Error cargando usuarios:", error);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        const payload = {
+            ...form,
+            fk_usuario: form.fk_usuario === "" ? null : parseInt(form.fk_usuario)
+        };
+
         const url = editando ? `${API_BASE}/conductor/${idEditar}` : `${API_BASE}/conductor`;
         const metodo = editando ? "PUT" : "POST";
 
@@ -74,7 +91,7 @@ function Conductores() {
             const res = await fetch(url, {
                 method: metodo,
                 headers: fetchHeaders,
-                body: JSON.stringify(form),
+                body: JSON.stringify(payload),
             });
             
             const data = await res.json();
@@ -160,6 +177,23 @@ function Conductores() {
                             <input type="date" style={styles.input} required
                                 value={form.licencia_vence} onChange={(e) => setForm({ ...form, licencia_vence: e.target.value })} />
                         </div>
+
+                        {/* SELECT DE USUARIOS */}
+                        <div>
+                            <label style={styles.label}>Usuario Vinculado (Opcional)</label>
+                            <select 
+                                style={styles.input}
+                                value={form.fk_usuario}
+                                onChange={(e) => setForm({ ...form, fk_usuario: e.target.value })}
+                            >
+                                <option value="">-- Sin usuario asignado --</option>
+                                {usuariosList.map(u => (
+                                    <option key={u.id_usuario} value={u.id_usuario}>
+                                        {u.nombre_usuario} (ID: {u.id_usuario})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         
                         <div style={{ gridColumn: "1 / -1", display: "flex", gap: "10px", marginTop: "15px" }}>
                             <button type="submit" style={styles.btnGuardar}>Guardar</button>
@@ -178,6 +212,7 @@ function Conductores() {
                             <th style={styles.th}>Contacto</th>
                             <th style={styles.th}>Licencia</th>
                             <th style={styles.th}>Vence</th>
+                            <th style={styles.th}>User ID</th>
                             {(puedeCrearYEditar || puedeEliminar) && <th style={styles.th}>Acciones</th>}
                         </tr>
                     </thead>
@@ -191,6 +226,11 @@ function Conductores() {
                                 <td style={styles.td}>
                                     <div style={{display:'flex', alignItems:'center', gap: '5px'}}>
                                         <Calendar size={14}/> {c.licencia_vence ? new Date(c.licencia_vence).toLocaleDateString() : 'N/A'}
+                                    </div>
+                                </td>
+                                <td style={styles.td}>
+                                    <div style={{display:'flex', alignItems:'center', gap: '5px'}}>
+                                        <UserCheck size={14}/> {c.fk_usuario || 'Ninguno'}
                                     </div>
                                 </td>
                                 <td style={styles.td}>
