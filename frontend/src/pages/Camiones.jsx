@@ -26,7 +26,7 @@ function Camiones() {
     const usuario = usuarioData ? JSON.parse(usuarioData) : null;
 
     const esAdmin = usuario?.rol === "Administrador";
-    const esCoAdmin = usuario?.rol === "co-administrador"; 
+    const esCoAdmin = usuario?.rol === "co_administrador"; 
 
     const puedeCrearYEditar = esAdmin || esCoAdmin;
     const puedeEliminar = esAdmin;
