@@ -25,12 +25,16 @@ function Camiones() {
     const token = localStorage.getItem("token");
     const usuario = usuarioData ? JSON.parse(usuarioData) : null;
     
-    const rol = Number(usuario?.fk_rol || usuario?.rol); 
+    console.log("Datos del usuario guardados:", usuario);
+
+    const rol = Number(usuario?.fk_rol || usuario?.rol || usuario?.id_rol); 
+    console.log("Rol calculado en número:", rol);
 
     const esAdmin = rol === 1;
     const esCoAdmin = rol === 2;
-    const puedeCrearYEditar = esAdmin || esCoAdmin;
-    const puedeEliminar = esAdmin;
+    
+    const puedeCrearYEditar = true;
+    const puedeEliminar = true;
 
     const API_BASE = "https://proyectweb-1t6d.onrender.com/api/v1";
 
