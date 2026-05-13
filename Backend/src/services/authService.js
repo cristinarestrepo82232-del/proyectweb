@@ -58,5 +58,16 @@ class AuthService {
         const { password_hash, ...usuarioSinPassword } = usuario;
         return { usuario: usuarioSinPassword, token };
     }
+    static async obtenerUsuarios() {
+        try {
+            // Seleccionamos id, email y fk_rol para poder filtrar en el frontend
+            const [rows] = await pool.execute('SELECT id_usuario, email, fk_rol FROM usuarios');
+            return rows;
+        } catch (error) {
+            const err = new Error('Error al obtener la lista de usuarios');
+            err.statusCode = 500;
+            throw err;
+        }
+    }
 }
 module.exports = AuthService;

@@ -47,5 +47,13 @@ class AuthController {
             next(error);
         }
     }
+    static async listarUsuarios(req, res, next) {
+        try {
+            const usuarios = await AuthService.obtenerUsuarios();
+            res.status(200).json(usuarios);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 module.exports = AuthController;

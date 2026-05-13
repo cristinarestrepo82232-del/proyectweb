@@ -28,5 +28,6 @@ router.get(
         });
     }
 );
+router.get('/usuarios', verificarToken, AuthController.listarUsuarios);
 
 module.exports = router;
