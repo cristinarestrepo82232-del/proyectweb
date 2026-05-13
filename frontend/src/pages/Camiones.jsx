@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Truck, X } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Camiones() {
     const [camiones, setCamiones] = useState([]);
     const [conductores, setConductores] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    // Estados del formulario
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [editando, setEditando] = useState(false);
     const [idEditar, setIdEditar] = useState(null);
@@ -15,12 +15,14 @@ function Camiones() {
         marca: "",
         modelo: "",
         capacidad: "",
-        estado: true, // 1 para Activo
+        estado: true,
         fk_conductor: ""
     });
 
-    // Validar Rol
+    const navigate = useNavigate();
+
     const usuarioData = localStorage.getItem("usuario");
+    const token = localStorage.getItem("token");
     const usuario = usuarioData ? JSON.parse(usuarioData) : null;
     const rol = usuario?.fk_rol;
 
@@ -29,29 +31,48 @@ function Camiones() {
     const puedeCrearYEditar = esAdmin || esCoAdmin;
     const puedeEliminar = esAdmin;
 
-    // URL base de tu API en Render
     const API_BASE = "https://proyectweb-1t6d.onrender.com/api/v1";
 
+    const fetchHeaders = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+
     useEffect(() => {
+        if (!token) {
+            toast.error("No tienes autorización. Inicia sesión.");
+            navigate("/login");
+            return;
+        }
         cargarDatos();
     }, []);
 
     const cargarDatos = async () => {
         try {
             const [resCamiones, resConductores] = await Promise.all([
-                fetch(`${API_BASE}/camiones`),
-                fetch(`${API_BASE}/conductores`)
+                fetch(`${API_BASE}/camiones`, { headers: fetchHeaders }),
+                fetch(`${API_BASE}/conductores`, { headers: fetchHeaders })
             ]);
+
+            if (resCamiones.status === 401 || resCamiones.status === 403) {
+                toast.error("Tu sesión ha expirado");
+                localStorage.removeItem("token");
+                localStorage.removeItem("usuario");
+                navigate("/login");
+                return;
+            }
 
             const dataCamiones = await resCamiones.json();
             const dataConductores = await resConductores.json();
 
-            setCamiones(dataCamiones);
-            setConductores(dataConductores);
+            setCamiones(Array.isArray(dataCamiones) ? dataCamiones : []);
+            setConductores(Array.isArray(dataConductores) ? dataConductores : []);
+            
             setLoading(false);
         } catch (error) {
-            console.error(error);
-            toast.error("Error al cargar los datos");
+            console.error("Error al cargar:", error);
+            toast.error("Error de conexión con el servidor");
+            setCamiones([]);
             setLoading(false);
         }
     };
@@ -59,7 +80,6 @@ function Camiones() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Convertimos estado a 1 o 0 para MySQL
         const payload = {
             ...form,
             estado: form.estado ? 1 : 0
@@ -71,12 +91,12 @@ function Camiones() {
         try {
             const res = await fetch(url, {
                 method: metodo,
-                headers: { "Content-Type": "application/json" },
+                headers: fetchHeaders,
                 body: JSON.stringify(payload),
             });
             
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || "Error al guardar");
+            if (!res.ok) throw new Error(data.error || data.message || "Error al guardar");
 
             toast.success(editando ? "Camión actualizado" : "Camión registrado");
             cargarDatos();
@@ -90,8 +110,15 @@ function Camiones() {
         if (!window.confirm("¿Seguro que quieres eliminar este camión?")) return;
 
         try {
-            const res = await fetch(`${API_BASE}/camion/${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Error al eliminar");
+            const res = await fetch(`${API_BASE}/camion/${id}`, { 
+                method: "DELETE",
+                headers: fetchHeaders
+            });
+            
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || data.message || "Error al eliminar");
+            }
 
             toast.success("Camión eliminado");
             setCamiones(camiones.filter(c => c.id_camion !== id));
@@ -135,7 +162,6 @@ function Camiones() {
                 )}
             </div>
 
-            {/* Formulario desplegable */}
             {mostrarFormulario && (
                 <div style={styles.formCard}>
                     <div style={styles.formHeader}>
@@ -194,7 +220,6 @@ function Camiones() {
                 </div>
             )}
 
-            {/* Tabla de Camiones */}
             <div style={styles.tableContainer}>
                 {loading ? (
                     <p style={{ padding: "20px", textAlign: "center", color: "#64748b" }}>Cargando camiones desde el servidor...</p>
@@ -251,7 +276,7 @@ function Camiones() {
                             {camiones.length === 0 && (
                                 <tr>
                                     <td colSpan="6" style={{ padding: "20px", textAlign: "center", color: "#64748b" }}>
-                                        No hay camiones registrados en la base de datos.
+                                        No hay camiones registrados o no se pudieron cargar.
                                     </td>
                                 </tr>
                             )}
