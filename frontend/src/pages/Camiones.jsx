@@ -24,17 +24,12 @@ function Camiones() {
     const usuarioData = localStorage.getItem("usuario");
     const token = localStorage.getItem("token");
     const usuario = usuarioData ? JSON.parse(usuarioData) : null;
-    
-    console.log("Datos del usuario guardados:", usuario);
 
-    const rol = Number(usuario?.fk_rol || usuario?.rol || usuario?.id_rol); 
-    console.log("Rol calculado en número:", rol);
+    const esAdmin = usuario?.rol === "Administrador";
+    const esCoAdmin = usuario?.rol === "co-administrador"; 
 
-    const esAdmin = rol === 1;
-    const esCoAdmin = rol === 2;
-    
-    const puedeCrearYEditar = true;
-    const puedeEliminar = true;
+    const puedeCrearYEditar = esAdmin || esCoAdmin;
+    const puedeEliminar = esAdmin;
 
     const API_BASE = "https://proyectweb-1t6d.onrender.com/api/v1";
 
@@ -70,7 +65,10 @@ function Camiones() {
             const dataCamiones = await resCamiones.json();
             const dataConductores = await resConductores.json();
 
-            setCamiones(Array.isArray(dataCamiones) ? dataCamiones : []);
+            let listaCamiones = Array.isArray(dataCamiones) ? dataCamiones : [];
+            listaCamiones.sort((a, b) => a.id_camion - b.id_camion);
+
+            setCamiones(listaCamiones);
             setConductores(Array.isArray(dataConductores) ? dataConductores : []);
             
             setLoading(false);
