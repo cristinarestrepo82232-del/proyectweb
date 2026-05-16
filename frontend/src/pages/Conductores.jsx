@@ -154,6 +154,8 @@ function Conductores() {
         setForm({ nombre: "", telefono: "", licencia_nro: "", licencia_vence: "", fk_usuario: "" });
     };
 
+    console.log("ESTADO ACTUAL DE usuariosList:", usuariosList);
+
     return (
         <div style={styles.container}>
             <div style={styles.header}>
