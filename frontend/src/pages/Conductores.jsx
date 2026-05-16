@@ -199,7 +199,7 @@ function Conductores() {
                                 <option value="">-- Sin usuario asignado --</option>
                                 {usuariosList.map(u => (
                                     <option key={u.id_usuario} value={u.id_usuario}>
-                                        {u.email} (ID: {u.id_usuario})
+                                        {u.nombre} (ID: {u.id_usuario})
                                     </option>
                                 ))}
                             </select>
