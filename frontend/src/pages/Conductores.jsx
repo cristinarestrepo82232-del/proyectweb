@@ -76,9 +76,6 @@ function Conductores() {
         try {
             const res = await fetch(`${API_BASE}/usuarios`, { headers: fetchHeaders });
             const data = await res.json();
-            
-            // ESPÍA 1: Ver qué recibe exactamente React
-            console.log("DATOS RECIBIDOS DEL FETCH:", data);
 
             if (Array.isArray(data)) {
                 setUsuariosList(data);
@@ -153,8 +150,6 @@ function Conductores() {
         setEditando(false);
         setForm({ nombre: "", telefono: "", licencia_nro: "", licencia_vence: "", fk_usuario: "" });
     };
-
-    console.log("ESTADO ACTUAL DE usuariosList:", usuariosList);
 
     return (
         <div style={styles.container}>
