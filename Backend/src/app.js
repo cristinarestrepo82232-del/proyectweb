@@ -15,6 +15,7 @@ const facturaRoutes = require('./routes/facturaRoutes');
 const gastoRoutes = require('./routes/gastoRoutes');
 const mantenimientoRoutes = require('./routes/mantenimientoRoutes');
 const viajeRoutes = require('./routes/viajeRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/v1', facturaRoutes);
 app.use('/api/v1', gastoRoutes);
 app.use('/api/v1', mantenimientoRoutes);
 app.use('/api/v1', viajeRoutes);
+app.use('/api/v1', usuarioRoutes);
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api', healthRoutes);
