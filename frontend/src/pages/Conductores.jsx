@@ -77,10 +77,14 @@ function Conductores() {
             const res = await fetch(`${API_BASE}/usuarios`, { headers: fetchHeaders });
             const data = await res.json();
             
+            // ESPÍA 1: Ver qué recibe exactamente React
+            console.log("DATOS RECIBIDOS DEL FETCH:", data);
+
             if (Array.isArray(data)) {
-                // Filtramos para mostrar solo los que tienen rol de conductor (ID 3 según tu SQL)
-                const soloConductores = data.filter(u => u.fk_rol === 3);
-                setUsuariosList(soloConductores);
+                setUsuariosList(data);
+                console.log("SE GUARDARON EN EL ESTADO");
+            } else {
+                console.log("LOS DATOS NO SON UN ARREGLO", data);
             }
         } catch (error) {
             console.error("Error cargando usuarios:", error);
